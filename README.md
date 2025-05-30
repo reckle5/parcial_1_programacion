@@ -13,15 +13,22 @@ cada una de las cuales puntúa a los participantes del 1 al 10.
 
 Se requiere un sistema que permita: 
 
-● Registrar los nombres de los participantes (5 en total) 
+● Registrar los nombres de los participantes (5 en total)
+
 ● Registrar las puntuaciones que cada jurado otorga a cada participante 
+
 ● Procesar y mostrar diferentes informaciones relevantes a partir de los datos cargados 
 
 Cada partido político debe almacenar la siguiente información: 
+
 ● Nombre del participante 
+
 ● Puntuación del Jurado 1 
+
 ● Puntuación del Jurado 2 
+
 ● Puntuación del Jurado 3 
+
 
 Se requiere lo siguiente:  
 1. Cargar participantes: Ingresar los nombres de cinco participantes. Cada nombre 
@@ -48,14 +55,17 @@ PUNTOS EXTRA (SUBEN NOTA)
 de (A a Z) con sus datos. 
 
 ● Deben usar su propia biblioteca para el ingreso de datos (Inputs.py). 
+
 ● Debe haber un menú de opciones funcional. 
+
 ● Deben implementar un módulo aparte con funciones (Funciones.py). 
-● El programa no debe romperse si el usuario ingresa letras u opciones no válidas 
-en el menú o en las cargas. 
-● Siempre que sea posible, las funciones deben devolver un valor (al menos un 
-booleano), salvo aquellas que solo impriman datos. 
+
+● El programa no debe romperse si el usuario ingresa letras u opciones no válidas en el menú o en las cargas. 
+
+● Siempre que sea posible, las funciones deben devolver un valor (al menos un booleano), salvo aquellas que solo impriman datos. 
+
 ● Todas las funciones deben estar documentadas. 
-● Si no se cargaron los participantes ni los puntajes no se debería poder acceder 
-a ninguna de las otras opciones. 
-● En el punto 7-8 podría haber más de un jurado máximo o mínimo, si logran 
-resolverlo de esa forma suman puntos extra.
+
+● Si no se cargaron los participantes ni los puntajes no se debería poder acceder a ninguna de las otras opciones. 
+
+● En el punto 7-8 podría haber más de un jurado máximo o mínimo, si logran resolverlo de esa forma suman puntos extra.
