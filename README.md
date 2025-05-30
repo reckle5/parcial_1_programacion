@@ -1,23 +1,28 @@
+CONSIGNA!
+
 A TENER EN CUENTA: 
 
-Está prohibido el uso de métodos de listas como append(), remove(), insert(), 
-entre otros. 
-No se permite el uso de funciones predefinidas como max(), min(), sum(). Se espera 
-que implementen sus propias funciones para estas operaciones. 
+Está prohibido el uso de métodos de listas como append(), remove(), insert(), entre otros. 
+No se permite el uso de funciones predefinidas como max(), min(), sum(). 
+Se espera que implementen sus propias funciones para estas operaciones. 
+
 Resolver el siguiente problema realizando un menú de opciones 
 Una academia de baile organiza una competencia abierta para definir a su nuevo o nueva 
 representante nacional. La competencia cuenta con un jurado compuesto por tres personas, 
 cada una de las cuales puntúa a los participantes del 1 al 10. 
+
 Se requiere un sistema que permita: 
+
 ● Registrar los nombres de los participantes (5 en total) 
 ● Registrar las puntuaciones que cada jurado otorga a cada participante 
 ● Procesar y mostrar diferentes informaciones relevantes a partir de los datos cargados 
+
 Cada partido político debe almacenar la siguiente información: 
 ● Nombre del participante 
 ● Puntuación del Jurado 1 
 ● Puntuación del Jurado 2 
 ● Puntuación del Jurado 3 
-1 
+
 Se requiere lo siguiente:  
 1. Cargar participantes: Ingresar los nombres de cinco participantes. Cada nombre 
 debe tener al menos 3 caracteres y solo contener letras y espacios. 
@@ -41,7 +46,7 @@ PUNTOS EXTRA (SUBEN NOTA)
 11. Top 3: Mostrar los tres participantes con mayor puntaje promedio 
 12. Participantes ordenados alfabéticamente: Mostrar los participantes ordenados 
 de (A a Z) con sus datos. 
-2 
+
 ● Deben usar su propia biblioteca para el ingreso de datos (Inputs.py). 
 ● Debe haber un menú de opciones funcional. 
 ● Deben implementar un módulo aparte con funciones (Funciones.py). 
