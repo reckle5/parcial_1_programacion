@@ -1,5 +1,6 @@
 from typing import Literal
 from Inputs import *
+import random
 
 #FUNCIONES DE INICIALIZACIÓN
 def imprimir_menu():
@@ -17,8 +18,10 @@ def imprimir_menu():
     print("8- Mostrar el jurado mas generoso")
     print("9- Mostrar participantes con puntuaciones iguales")
     print("10- Buscar participante por nombre")
-    print("11- Mostrar participantes ordenados alfabeticamente")
-    
+    print("11- Mostrar Top 3")
+    print("12- Mostrar participantes ordenados alfabeticamente")
+    print("13- Mostrar ganador")
+    print("14- Desempatar")
 
 def menu_principal() -> str | None:
     """
@@ -27,7 +30,7 @@ def menu_principal() -> str | None:
     imprimir_menu()
 
     opcion_elegida = input("Seleccione una opcion: ")
-    if validar_entero(opcion_elegida) and validar_rango_inclusivo(1,12,int(opcion_elegida)):
+    if validar_entero(opcion_elegida) and validar_rango_inclusivo(1,14,int(opcion_elegida)):
         return opcion_elegida
     else:
         return print("\nError! opcion no valida, vuelva a intentarlo. ")
@@ -66,231 +69,222 @@ def inicializar_matriz(cantidad_filas:int,cantidad_columnas:int,valor_inicial:an
         matriz += [fila]
     return matriz
 
-
 #FUNCIONES PARA IMPRIMIR DATOS
 
-def mostrar_array(array:list,msj_opcional=""):
+def mostrar_array(array:list,msj_opcional="") -> str:
     """
-    Imprime los elementos de una lista, con índice y mensaje opcional.
+    Genera un string con los elementos del array, cada uno precedido por su índice y un mensaje opcional.
 
     Args:
-        array (list): lista de elementos a imprimir.
-        msj_opcional (str): texto que se antepone a cada elemento impreso.
+        array (list): Lista de elementos a mostrar.
+        msj_opcional (str): Texto que se antepone a cada línea (por ejemplo: "Opción ").
 
     Returns:
-        None: imprime directamente en consola.
+        str: Cadena con todos los elementos formateados.
     """
+    msj = ""
     for i in range(len(array)):
-        print(f"{msj_opcional}{i + 1}- {array[i]}")
+        msj += f"{msj_opcional}{i + 1}- {array[i]}\n"
+    return msj
 
-def mostrar_mismo_puntaje(matriz:list,array:list):
+def mostrar_mismo_puntaje(array_nombres:list,matriz_puntajes:list) -> str:
     """
-    Muestra los grupos de participantes que tienen el mismo puntaje promedio.
+    Muestra los participantes agrupados por promedio repetido.
 
     Args:
-        matriz (list): Lista de listas, donde cada sublista contiene nombres de participantes con el mismo puntaje.
-        array (list): Lista de puntajes promedio correspondientes a cada grupo en 'matriz'.
+        array_nombres (list): Lista de promedios repetidos.
+        matriz_puntajes (list): Lista de listas con nombres de los participantes que tienen ese promedio.
 
-    Prints:
-        Imprime el puntaje promedio seguido de los nombres de los participantes que lo obtuvieron.
+    Returns:
+        str: Cadena con los promedios y los participantes que los comparten.
     """
-    for f in range(len(matriz)): 
-        print(f"PARTICIPANTES CON PROMEDIO: {array[f]:.2f}")
-        for c in range(len(matriz[f])):
-            print(f"-{matriz[f][c]}")
-
-def mostrar_puntajes(matriz_puntaje:list,array_nombres:list,array_promedio:list):
+    msj = ""
+    for f in range(len(matriz_puntajes)): 
+        msj += f"PARTICIPANTES CON PROMEDIO: {array_nombres[f]:.2f}\n"
+        for c in range(len(matriz_puntajes[f])):
+            msj += f"-{matriz_puntajes[f][c]}\n"
+    return msj
+    
+def mostrar_puntajes(array_nombres:list,matriz_puntajes:list,array_promedios:list) -> str:
     """
-    Imprime los puntajes y el promedio de cada participante.
+    Muestra todos los participantes con sus puntajes por jurado y su promedio.
 
     Args:
-        matriz_puntaje (list): matriz que contiene los puntajes por jurado para cada participante.
-        array_nombres (list): nombres de los participantes.
-        array_promedio (list): promedios de puntaje de los participantes.
-    """
-    for f in range(len(matriz_puntaje)):
-        print(f"\nPARTICIPANTE: {array_nombres[f]}")
-        for c in range(len(matriz_puntaje[f])):
-            print(f" -Puntaje Jurado n°{c + 1}: {matriz_puntaje[f][c]}")
+        array_nombres (list): Lista de nombres de participantes.
+        matriz_puntajes (list): Matriz con los puntajes por jurado.
+        array_promedios (list): Lista de promedios por participante.
 
-        print(f"PROMEDIO : {array_promedio[f]:.2f}\n")
-
-def mostrar_participante_puntaje(matriz:list,array:list,array_promedio:list):
+    Returns:
+        str: Texto con la información completa de cada participante.
     """
-    Imprime los puntajes y promedio de un único participante.
+    msj = ""
+    for f in range(len(matriz_puntajes)):
+        msj += f"\nPARTICIPANTE: {array_nombres[f]}"
+        for c in range(len(matriz_puntajes[f])):
+           msj += f" \n-Puntaje Jurado n°{c + 1}: {matriz_puntajes[f][c]}"
+
+        msj += f"\nPROMEDIO : {array_promedios[f]:.2f}/10\n"
+        
+    return msj
+
+def mostrar_puntaje_participante(array_nombres:list,matriz_puntaje:list,array_promedios:list) -> str:
+    """
+    Muestra los puntajes por jurado y el promedio de un solo participante.
 
     Args:
-        matriz (list): lista de puntajes del participante.
-        array (list): nombre del participante.
-        array_promedio (list): promedio de puntaje del participante.
+        nombre (str): Nombre del participante.
+        puntajes (list): Lista de puntajes por jurado.
+        promedio (float): Promedio del participante.
+
+    Returns:
+        str: Texto con la información del participante.
     """
-    print(f"\nPARTICIPANTE: {array}")
+    msj = f"\nPARTICIPANTE: {array_nombres}"
 
-    for i in range(len(matriz)):
-        print(f" -Puntaje Jurado n°{i + 1}: {matriz[i]}")
+    for i in range(len(matriz_puntaje)):
+        msj += f"\n-Puntaje Jurado n°{i + 1}: {matriz_puntaje[i]}"
 
-    print(f"PROMEDIO : {array_promedio:.2f}")  
+    msj += f"\nPROMEDIO : {array_promedios:.2f}"
+    return msj
 
-def mostrar_promedio_participantes(array_promedios:list,array_nombres:list,promedio:int,menor:bool):
+def mostrar_promedio_participantes(array_nombres:list,array_promedios:list,promedio:int,menor:bool) -> str:
     """
-    Muestra los participantes cuyo promedio es menor o mayor que un valor dado.
+    Muestra los participantes cuyo promedio es mayor o menor que un valor de referencia.
 
     Args:
-        array_promedios (list): Lista de promedios numéricos de los participantes.
-        array_nombres (list): Lista de nombres de los participantes, en el mismo orden que 'array_promedios'.
-        promedio (int): Valor de referencia con el que se compararán los promedios.
-        menor (bool): Si es True, se mostrarán los participantes con promedio menor que el dado.
-                      Si es False, se mostrarán los participantes con promedio mayor que el dado.
+        array_nombres (list): Lista de nombres de los participantes.
+        array_promedios (list): Lista de promedios de los participantes.
+        promedio (int): Valor de comparación.
+        menor (bool): Si es True, muestra quienes tienen menos que el promedio dado; si es False, quienes tienen más.
 
-    Prints:
-        - Nombre y promedio de cada participante que cumple la condición.
-        - Si ningún participante cumple, imprime un mensaje de error.
+    Returns:
+        str: Texto con los participantes que cumplen la condición, o un mensaje de error si no hay ninguno.
     """
     contador = 0
-
+    msj = ""
     for i in range(len(array_promedios)):
         if menor:
             if array_promedios[i] < promedio:
                 contador += 1
-                print(f"{array_nombres[i]}, tuvo promedio de {array_promedios[i]:.2f}")
+                msj += f"{array_nombres[i]}, tuvo promedio de {array_promedios[i]:.2f}/10\n"
         else:
             if array_promedios[i] > promedio:
                 contador += 1
-                print(f"{array_nombres[i]} tuvo promedio de {array_promedios[i]:.2f}")
+                msj += f"{array_nombres[i]} tuvo promedio de {array_promedios[i]:.2f}/10\n"
 
     if contador == 0:
-        print("ERROR! No hay nigun participante que cumpla con los requisitos.")
+        msj += "ERROR! No hay nigun participante que cumpla con los requisitos."
+    return msj
 
-def comprobar_array_vacio(valor_uno,valor_dos) -> bool:
+def mostrar_top_3(array_nombres:list,array_promedios:list) -> str:
     """
-    Verifica si ambas listas están vacías.
+    Muestra el podio de los primeros 3 participantes con mayor puntaje promedio.
 
     Args:
-        valor_uno (list): Primera lista.
-        valor_dos (list): Segunda lista.
+        array_nombres (list): Lista de nombres ordenados por puntaje.
+        array_promedios (list): Lista de promedios correspondientes.
 
     Returns:
-        bool: True si ambas listas están vacías, False en caso contrario.
+        str: Texto con el TOP 3 de participantes.
     """
-    if valor_uno == [] and valor_dos == []:
-        return True
-    else:
-        return False
+    contador = 0
+    msj = ""
+    for i in range(len(array_nombres)):
+        msj += f"\n   *** TOP {i +1} ***\n"
+        msj += f"PARTICIPANTE: {array_nombres[i]}"
+        msj += f"\nPROMEDIO : {array_promedios[i]:.2f}\n"
+        contador += 1
+        if contador == 3:
+            break
+    return msj
 
-def mostrar_segun_retorno(valor_uno,valor_dos,msj_error:str) -> str | None:
+def mostrar_participantes_con_promedios_iguales(valor_uno,valor_dos,msj_error:str) -> str:
     """
-    Muestra los resultados de participantes con puntajes iguales o un mensaje de error si no hay datos.
+    Muestra los participantes con promedios repetidos, si existen. Si no, muestra un mensaje de error.
 
     Args:
-        valor_uno (list): Lista de listas con participantes que comparten el mismo puntaje.
-        valor_dos (list): Lista de puntajes correspondientes a cada grupo.
-        msj_error (str): Mensaje a mostrar si ambas listas están vacías.
+        valor_uno (list): Lista de listas de participantes por promedio repetido.
+        valor_dos (list): Lista de promedios repetidos.
+        msj_error (str): Mensaje a mostrar si no hay coincidencias.
 
     Returns:
-        str | None: Devuelve el mensaje de error si no hay datos, de lo contrario imprime los resultados.
+        str: Mensaje de error o lista formateada de resultados.
     """
-    if comprobar_array_vacio(valor_uno,valor_dos) :
+    if comprobar_array_vacio(valor_uno,valor_dos):
         return msj_error
     else:
-        mostrar_mismo_puntaje(valor_uno,valor_dos)
+        return mostrar_mismo_puntaje(valor_uno,valor_dos)
+        
+
+def mostrar_si_hay_empate(booleano:bool,array_nombres:list,matriz_puntajes:list,array_promedios:list) -> str:
+    """
+    Muestra el resultado final según haya empate o no.
+
+    Args:
+        booleano (bool): True si hay un único ganador, False si hay empate.
+        array_nombres (list): Lista de nombres.
+        matriz_puntajes (list): Matriz de puntajes por jurado.
+        array_promedios (list): Lista de promedios.
+
+    Returns:
+        str: Mensaje con el ganador o con aviso de desempate.
+    """
+    if booleano:
+        msj= "\nEl ganador de la competencia es:\n" 
+        ganador = mostrar_puntaje_participante(array_nombres[0],matriz_puntajes[0],array_promedios[0])
+        msj += ganador
+        return msj
+    else:
+        msj = "\nNo hay ganador, hay que ir a DESEMPATE!"
+        return msj
   
 #FUNCIONES DE CARGA DE DATOS
 
-def cargar_datos_matriz(matriz:list,msj:str): 
+def cargar_datos_matriz(matriz:list,msj:str)-> list: 
     """
-    Carga manualmente datos numéricos en una matriz (lista de listas), solicitando al usuario las puntuaciones 
-    de cada jugador. Cada celda de la matriz se completa con un valor entero validado dentro del rango [1, 10].
+    Carga manualmente datos numéricos en una matriz (lista de listas), solicitando al usuario 
+    puntuaciones para cada jugador. Cada celda se valida para que contenga un número entero entre 1 y 10.
 
     Args:
-        matriz (list): Matriz vacía o con estructura predefinida (lista de listas) donde se almacenarán los datos.
-        msj (str): Mensaje base que se mostrará al pedir la puntuación de cada celda (por ejemplo: "Ingrese puntuación").
-
-    Precondiciones:
-        - Se espera que estén disponibles las siguientes funciones auxiliares:
-            - `validar_rango_no_inclusivo(inicio, fin, valor)`: Devuelve True si valor ∈ (inicio, fin).
-            - `validar_rango_inclusivo(inicio, fin, valor)`: Devuelve True si valor ∈ [inicio, fin].
-            - `pedir_cadena(mensaje, funcion_validadora)`: Solicita entrada del usuario y aplica la función validadora.
-            - `validar_entero(valor)`: Devuelve True si el valor es un número entero válido.
-
-    Funcionamiento:
-        - Para cada fila (jugador), se imprime un encabezado de carga.
-        - Para cada columna (puntaje), se solicita un número entre 1 y 10, reintentando si no es válido.
-        - La validación de rangos `no inclusivos` usada en los `if` es redundante, ya que todos los caminos hacen lo mismo.
-
-    Prints:
-        - Muestra mensajes indicando qué puntaje se está cargando para cada jugador.
-        - Solicita la entrada para cada posición de la matriz.
+        matriz (list): Matriz vacía o con estructura predefinida (lista de listas) que se llenará con los datos.
+        msj (str): Mensaje base a mostrar al pedir la puntuación de cada celda 
+                  (por ejemplo: "Ingrese puntuación del jurado").
 
     Side Effects:
-        - Modifica directamente la matriz ingresada por referencia.
-    """
-    for f in range(len(matriz)):
-        if validar_rango_no_inclusivo(0,2,f+1):
-            print(f"\nCARGAR PUNTUACIONES DEL JUGADOR {f+1}: ")
-        elif validar_rango_no_inclusivo(1,3,f+1):
-            print(f"\nCARGAR PUNTUACIONES DEL JUGADOR {f+1}: ")
-        elif validar_rango_no_inclusivo(2,4,f+1):
-            print(f"\nCARGAR PUNTUACIONES DEL JUGADOR {f+1}: ")
-        elif validar_rango_no_inclusivo(3,5,f+1):
-            print(f"\nCARGAR PUNTUACIONES DEL JUGADOR {f+1}: ")
-        else:
-             print(f"\nCARGAR PUNTUACIONES DEL JUGADOR {f+1}: ")
-
-        for c in range(len(matriz[f])):
-            if validar_rango_no_inclusivo(0,2,f+1):
-                matriz[f][c]= pedir_cadena(f"{msj} {c+1}: ", validar_entero)
-
-                while not validar_rango_inclusivo(1,10,int(matriz[f][c])):
-                    matriz[f][c]= pedir_cadena(f"Error, {msj} {c+1}: ", validar_entero)
-
-                matriz[f][c] = int(matriz[f][c])
-
-            elif validar_rango_no_inclusivo(1,3,f+1):
-                matriz[f][c]= pedir_cadena(f"{msj} {c+1}: ", validar_entero)
-
-                while not validar_rango_inclusivo(1,10,int(matriz[f][c])):
-                    matriz[f][c]= pedir_cadena(f"Error, {msj} {c+1}: ", validar_entero)
-
-                matriz[f][c] = int(matriz[f][c])
-
-            elif validar_rango_no_inclusivo(2,4,f+1):
-                matriz[f][c]= pedir_cadena(f"{msj} {c+1}: ", validar_entero)
-
-                while not validar_rango_inclusivo(1,10,int(matriz[f][c])):
-                    matriz[f][c]= pedir_cadena(f"Error, {msj} {c+1}: ", validar_entero)
-
-                matriz[f][c] = int(matriz[f][c])
-
-            elif validar_rango_no_inclusivo(3,5,f+1):
-                matriz[f][c]= pedir_cadena(f"{msj} {c+1}: ", validar_entero)
-
-                while not validar_rango_inclusivo(1,10,int(matriz[f][c])):
-                    matriz[f][c]= pedir_cadena(f"Error, {msj} {c+1}: ", validar_entero)
-
-                matriz[f][c] = int(matriz[f][c])
-
-            else:
-                matriz[f][c]= pedir_cadena(f"{msj} {c+1}: ", validar_entero)
-
-                while not validar_rango_inclusivo(1,10,int(matriz[f][c])):
-                    matriz[f][c]= pedir_cadena(f"Error, {msj} {c+1}: ", validar_entero)
-
-                matriz[f][c] = int(matriz[f][c])   
-    
-def cargar_array_str(array:list,msj:str,longuitud_str:int) -> bool:
-    """
-    Solicita al usuario cadenas para cada posición de un array y los carga.
-
-    Args:
-        array (list): array preexistente que se rellenará.
-        msj (str): mensaje base para solicitar cada elemento.
-        longuitud_str (int): longitud mínima requerida para la validación de cada cadena.
+        - Muestra mensajes en consola indicando qué puntaje se está cargando.
+        - Solicita al usuario ingresar datos por consola.
+        - Modifica directamente la matriz original (por referencia).
 
     Returns:
+        list: La matriz con los datos cargados y validados.
+    """
+    for f in range(len(matriz)):
+        print(f"\nCARGAR PUNTUACIONES DEL JUGADOR {f+1}: ")
+        for c in range(len(matriz[f])):
+            matriz[f][c]= pedir_cadena(f"{msj} {c+1}: ", validar_entero)
+
+            while not validar_rango_inclusivo(1,10,int(matriz[f][c])):
+                matriz[f][c]= pedir_cadena(f"Error, {msj} {c+1}: ", validar_entero)
+
+            matriz[f][c] = int(matriz[f][c])
+    return matriz
+    
+def cargar_array_str(array:list,msj:str,longitud_str:int) -> bool:
+    """
+    Solicita al usuario ingresar cadenas de texto para cada posición del array, 
+    validando que cumplan con una longitud mínima y solo contengan caracteres alfabéticos.
+
+    Args:
+        array (list): Array preexistente que será rellenado con cadenas.
+        msj (str): Mensaje base que se mostrará al solicitar cada dato.
+        longitud_str (int): Longitud mínima requerida para aceptar una cadena como válida.
+
+    Returns:
+        bool: True si se cargó al menos un elemento en el array, False en caso contrario.
         bool: True si el array tiene al menos un elemento después de cargar; False en caso contrario.
     """
     for i in range(len(array)):
-        dato = pedir_cadena_doble_validacion(f"{msj} {i + 1}: ",validar_cadena_alfa,validar_longuitud,longuitud_str)
+        dato = pedir_cadena_doble_validacion(f"{msj} {i + 1}: ",validar_cadena_alfa,validar_longitud,longitud_str)
         dato = convertir_mayuscula(dato)
         array[i] = dato
 
@@ -302,13 +296,14 @@ def cargar_array_str(array:list,msj:str,longuitud_str:int) -> bool:
 #FUNCIONES DE CALCULOS
 
 def sumar_fila_matriz(matriz:list) -> list[int]:
-    """Suma los valores de cada fila de la matriz.
+    """
+    Suma los valores de cada fila en una matriz numérica.
 
     Args:
-        matriz (list): Matriz de números.
+        matriz (list): Matriz de listas, donde cada sublista representa una fila de números.
 
     Returns:
-        list[int]: Suma de cada fila.
+        list[int]: Lista con la suma de cada fila.
     """
     array_sumar_filas = generar_array(len(matriz),0)
 
@@ -318,14 +313,15 @@ def sumar_fila_matriz(matriz:list) -> list[int]:
 
     return array_sumar_filas
 
-def sumar_columnas_matriz(matriz:list) -> list:
-    """Suma los valores de cada columna de la matriz.
+def sumar_columnas_matriz(matriz:list) -> list[int]:
+    """
+    Suma los valores de cada columna en una matriz numérica.
 
     Args:
-        matriz (list): Matriz de números.
+        matriz (list): Matriz de listas, donde cada sublista representa una fila de números.
 
     Returns:
-        list: Suma de cada columna.
+        list[int]: Lista con la suma de cada columna.
     """
     array_sumar_columnas = generar_array(len(matriz[0]),0)
 
@@ -335,15 +331,16 @@ def sumar_columnas_matriz(matriz:list) -> list:
 
     return array_sumar_columnas
 
-def calcular_promedio(array_suma_fila:list,divisor:int) -> list[int]:
-    """Calcula el promedio de cada valor del array usando un divisor.
+def calcular_promedio(array_suma_fila:list,divisor:int) -> list[float]:
+    """
+    Calcula el promedio dividiendo cada valor de una lista por un divisor.
 
     Args:
-        array_suma_fila (list): Lista de sumas.
-        divisor (int): Número por el que se divide cada suma.
+        array_suma_fila (list): Lista con sumas (por ejemplo, suma de filas).
+        divisor (int): Valor por el cual dividir cada suma.
 
     Returns:
-        list[int]: Promedios calculados.
+        list[float]: Lista de promedios calculados.
     """
     array_promedio = generar_array(len(array_suma_fila),0)
 
@@ -353,13 +350,18 @@ def calcular_promedio(array_suma_fila:list,divisor:int) -> list[int]:
     return array_promedio
 
 def calcular_tipo_de_jurado(promedio_jurados:list)-> tuple:
-    """Determina el jurado con el mayor y menor promedio.
+    """
+    Determina cuál es el jurado con el mayor y menor promedio.
 
     Args:
-        promedio_jurados (list): Promedios por jurado.
+        promedio_jurados (list): Lista de promedios por jurado.
 
     Returns:
-        tuple: (jurado_min, jurado_max, minimo, maximo)
+        tuple[int, int, float, float]: 
+            - Número del jurado con el menor promedio.
+            - Número del jurado con el mayor promedio.
+            - Valor mínimo del promedio.
+            - Valor máximo del promedio.
     """
     bandera = True
     jurado_min = 0
@@ -384,72 +386,124 @@ def calcular_tipo_de_jurado(promedio_jurados:list)-> tuple:
 
     return jurado_min,jurado_max,minimo,maximo
 
+def calcular_ganador(array_promedios:list) -> bool:
+    """
+    Determina si hay un único ganador basado en los promedios.
+
+    Compara los dos primeros promedios de la lista (suponiendo que está ordenada de mayor a menor)
+    y devuelve False si están empatados.
+
+    Args:
+        array_promedios (list): Lista de promedios ordenada de mayor a menor.
+
+    Returns:
+        bool: True si hay un único ganador, False si hay empate entre los primeros dos.
+    """
+    if len(array_promedios) > 1 and array_promedios[0] == array_promedios[1]:
+        return False
+    else:
+        return True
+
+
+def calcular_ganador_desempate(array_promedios) -> int:
+    """
+    En caso de empate en el primer puesto, elige aleatoriamente a uno de los empatados como ganador.
+
+    Busca cuántos participantes tienen el mismo promedio que el primero, y selecciona uno al azar.
+
+    Args:
+        array_promedios (list): Lista de promedios ordenada de mayor a menor.
+
+    Returns:
+        int: Índice del ganador elegido al azar entre los empatados.
+    """
+    contador = 0
+
+    for i in range( 1,len(array_promedios)):
+        if array_promedios[0] == array_promedios[i]:
+            contador+=1
+    
+    ganador_random = random.randint(0,contador-1)
+
+    return ganador_random
+
 #FUNCIONES DE BUSQUEDA
 
-def buscar_en_lista(lista:list,valor:any) -> None | bool:
-    """Busca si un valor existe en una lista.
+def buscar_en_lista(lista:list,valor:any) -> bool:
+    """
+    Verifica si un valor está presente dentro de una lista.
 
     Args:
-        lista (list): Lista donde buscar.
+        lista (list): Lista en la que se busca.
         valor (any): Valor a buscar.
 
     Returns:
-        bool | None: True si está, False si no.
+        bool: True si el valor se encuentra en la lista, False si no.
     """
+    estado = False
     for i in range(len(lista)):
         if valor == lista[i]:
-            return True
+            estado = True
         
-    return False
-        
-def buscar_indice(lista:list, valor:any) ->  int | Literal[False]:
-    """Devuelve el índice de un valor en la lista.
+    return estado
+
+def buscar_indice(lista:list, valor:any)  -> int:
+    """
+    Busca un valor en una lista y devuelve el índice de su primera aparición.
 
     Args:
-        lista (list): Lista donde buscar.
-        valor (any): Valor a buscar.
+        lista (list): Lista donde se buscará el valor.
+        valor (any): Valor a buscar en la lista.
 
     Returns:
-        int | bool: Índice si lo encuentra, False si no.
+        int: Índice del valor si se encuentra, -1 si no está presente.
     """
+
     for i in range(len(lista)):
         if valor == lista[i]:
-            indice = i
-            return indice       
-    return False
+            return i 
+    return -1
 
-def buscar_mismo_puntaje(promedio:list,participantes:list)-> list | Literal[False]:
-    """Busca participantes con el mismo puntaje promedio y guarda esos puntajes en un array y los nombres que corresponden los guarda en una matriz. .
+def buscar_mismo_puntaje(array_promedios:list,array_nombres:list)-> tuple[list, list]: 
+    """
+    Busca participantes que comparten el mismo puntaje promedio.
+
+    Agrupa a los participantes por promedio repetido, y devuelve:
+    - una lista de listas con los nombres de participantes que tienen el mismo promedio
+    - una lista con los promedios repetidos
 
     Args:
-        promedio (list): Lista de promedios.
-        participantes (list): Lista de nombres.
+        array_promedios (list): Lista de promedios de los participantes.
+        array_nombres (list): Lista de nombres de los participantes.
 
     Returns:
-        list: Lista de grupos de participantes con mismo puntaje 
+        tuple[list, list]: 
+            - Lista de grupos de nombres con el mismo puntaje promedio.
+            - Lista de los promedios que están repetidos.
     """
     mismo_puntaje = []
     participantes_mismo_puntaje = []
 
-    for i in range(len(promedio)-1):
-        for j in range(i + 1,len(promedio)):
-            if promedio[i] == promedio[j]:
-                valor = promedio[i]
+    for i in range(len(array_promedios)-1):
+        for j in range(i+1, len(array_promedios)):
+            if array_promedios[i] == array_promedios[j]:
+                valor = array_promedios[i]
 
                 if not buscar_en_lista(mismo_puntaje,valor):
                     mismo_puntaje += [valor]
-                    participantes_mismo_puntaje += [[participantes[i], participantes[j]]]
+                    participantes_mismo_puntaje += [[ array_nombres[i],  array_nombres[j]]]
                 else:
                     indice = buscar_indice(mismo_puntaje,valor)
-                    if not buscar_en_lista(participantes_mismo_puntaje[indice],participantes[i]):
-                        participantes_mismo_puntaje[indice] += [participantes[i]]
-    
-                    if not buscar_en_lista(participantes_mismo_puntaje[indice],participantes[j]):
-                        participantes_mismo_puntaje[indice]  += [participantes[j]]
+                    if indice != -1:
+                        if not buscar_en_lista(participantes_mismo_puntaje[indice], array_nombres[i]):
+                            participantes_mismo_puntaje[indice] += [ array_nombres[i]]
+        
+                        if not buscar_en_lista(participantes_mismo_puntaje[indice], array_nombres[j]):
+                            participantes_mismo_puntaje[indice]  += [ array_nombres[j]]
     
     return participantes_mismo_puntaje,mismo_puntaje
 
-def buscar_por_nombre(array:list,nombre:str) -> int | Literal[False]:
+def buscar_por_nombre(array_nombres:list,nombre:str) -> int | Literal[False]:
     """Busca un nombre en el array y devuelve su índice.
 
     Args:
@@ -459,33 +513,38 @@ def buscar_por_nombre(array:list,nombre:str) -> int | Literal[False]:
     Returns:
         int | bool: Índice si se encuentra, False si no.
     """
-    for i in range(len(array)):
-        if array[i] == nombre:
+    for i in range(len(array_nombres)):
+        if array_nombres[i] == nombre:
             return i
     return False
 
-def bucador_participantes(nombres:list,puntajes:list,promedios:list):
-
-    """Busca un participante por nombre e imprime su puntaje y promedio.
+def bucador_de_participantes(array_nombres:list,matriz_puntajes:list,array_promedios:list) -> str:
+    """
+    Pide un nombre de participante al usuario, lo busca en la lista y, si existe, 
+    muestra su puntaje y promedio. Si no se encuentra, muestra un mensaje de error.
 
     Args:
-        nombres (list): Lista de nombres.
-        puntajes (list): Lista de listas de puntajes.
-        promedios (list): Lista de promedios.
+        array_nombres (list): Lista de nombres de participantes.
+        matriz_puntajes (list): Lista de listas con puntajes por participante.
+        array_promedios (list): Lista de promedios por participante.
+
+    Returns:
+        str: Mensaje con los datos del participante o mensaje de error si no se encuentra.
     """
     input = pedir_cadena("Ingrese el nombre del participante: ", validar_cadena_alfa)
     input = convertir_mayuscula(input)
 
-    indice_participante = buscar_por_nombre(nombres,input)
+    indice_participante = buscar_por_nombre(array_nombres,input)
 
     if verificar_tipo_retorno(indice_participante,bool):
-        print("UPS.. No hay ningun jugador con ese nombre")
+        msj = "UPS.. No hay ningun jugador con ese nombre"
     else:
-        puntaje = puntajes[indice_participante]
-        nombre = nombres[indice_participante]
-        promedio = promedios[indice_participante]
-        msj =f"\n{mostrar_participante_puntaje(puntaje,nombre,promedio)}"
-        return msj
+        puntaje = matriz_puntajes[indice_participante]
+        nombre = array_nombres[indice_participante]
+        promedio = array_promedios[indice_participante]
+        msj = f"\n{mostrar_puntaje_participante(nombre,puntaje,promedio)}"
+    return msj
+
 
 #FUNCIONES DE ORDENAMIENTO
 def intercambiar_inidces(array,izq,der):
@@ -504,24 +563,49 @@ def intercambiar_inidces(array,izq,der):
     array[izq] = array[der]
     array[der] = aux_izq
 
-def ordenar_alfabeticamente(array_nombres:list,matriz_puntajes:list,promedio:list):
+def ordenar_alfabeticamente(array_nombres:list,matriz_puntajes:list,array_promedios:list)-> tuple[list, list, list]:
     """
-    Ordena alfabéticamente la lista de nombres y reorganiza las listas de puntajes y promedios
-    para mantener la correspondencia entre los datos.
+    Ordena alfabéticamente la lista de nombres y reorganiza las listas de puntajes y promedios 
+    para mantener la correspondencia entre los datos de cada participante.
 
     Parámetros:
-    array_nombres (list): Lista de nombres que se ordenarán alfabéticamente.
-    matriz_puntajes (list): Lista de listas con los puntajes asociados a cada nombre.
-    promedio (list): Lista con los promedios correspondientes a cada nombre.
+        array_nombres (list): Lista de nombres a ordenar alfabéticamente.
+        matriz_puntajes (list): Lista de listas con los puntajes asociados a cada nombre.
+        array_promedios (list): Lista con los promedios correspondientes a cada nombre.
 
     Retorna:
-    tuple: Las tres listas reordenadas (nombres, puntajes y promedios) manteniendo la correspondencia original.
+        tuple[list, list, list]: Las tres listas reordenadas (nombres, puntajes y promedios) 
+        según el orden alfabético de los nombres, manteniendo la correspondencia entre datos.
     """
     for izq in range(len(array_nombres)-1):
         for der in range(izq + 1,len(array_nombres)):
             if array_nombres[izq] > array_nombres[der]:
                 intercambiar_inidces(array_nombres,izq,der)
                 intercambiar_inidces(matriz_puntajes,izq,der)
-                intercambiar_inidces(promedio,izq,der)
+                intercambiar_inidces(array_promedios,izq,der)
 
-    return array_nombres,matriz_puntajes,promedio
+    return array_nombres,matriz_puntajes,array_promedios
+
+def ordenar_promedio_mayor(array_nombres:list,matriz_puntajes:list,array_promedios:list)-> tuple[list, list, list]:
+    """
+    Ordena las listas de nombres, puntajes y promedios en función del promedio de mayor a menor,
+    manteniendo la correspondencia entre los datos de cada participante.
+
+    Parámetros:
+        array_nombres (list): Lista de nombres de los participantes.
+        matriz_puntajes (list): Lista de listas con los puntajes de cada participante.
+        array_promedios (list): Lista con los promedios correspondientes.
+
+    Retorna:
+        tuple[list, list, list]: Las tres listas reordenadas (nombres, puntajes y promedios) 
+        en orden descendente según los valores de los promedios.
+    """
+    for izq in range(len(array_promedios)-1):
+        for der in range(izq + 1,len(array_promedios)):
+            if array_promedios[izq] < array_promedios[der]:
+                intercambiar_inidces(array_promedios,izq,der)
+                intercambiar_inidces(array_nombres,izq,der)
+                intercambiar_inidces(matriz_puntajes,izq,der)
+
+    return array_nombres,matriz_puntajes,array_promedios
+

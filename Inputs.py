@@ -67,15 +67,15 @@ def convertir_mayuscula(cadena:str) -> str:
 
 def pedir_cadena(cadena:str,validacion:callable)->str:
     """
-    Solicita al usuario una cadena y la valida con una función.
+    Solicita al usuario una cadena por consola y la valida usando una función.
 
     Args:
-        prompt (str): mensaje a mostrar para solicitar la entrada.
-        validacion (callable): función que recibe la cadena y devuelve True si es válida.
+        cadena (str): Mensaje a mostrar para pedir la entrada.
+        validacion (callable): Función que toma la entrada y retorna True si es válida.
 
     Returns:
-        str: cadena ingresada por el usuario que cumple la validación.
-    """
+        str: Cadena ingresada que cumple con la validación.
+    """    
     cadena = input(cadena)
     while True:
         if validacion(cadena):
@@ -83,38 +83,39 @@ def pedir_cadena(cadena:str,validacion:callable)->str:
         else:
             cadena = input("ingreso algún caracter invalido,intente otra vez: ")
 
-def pedir_cadena_doble_validacion(cadena:str,validacion_uno:callable,validacion_dos:callable,parametro_dos:int):
+def pedir_cadena_doble_validacion(cadena:str,validacion_uno:callable,validacion_dos:callable,parametro_dos:int) -> str:
     """
-    Solicita al usuario una cadena y la valida con dos funciones.
+    Solicita al usuario una cadena por consola y la valida con dos funciones.
 
     Args:
-        prompt (str): mensaje a mostrar para solicitar la entrada.
-        validacion_uno (callable): primera función de validación que recibe la cadena.
-        validacion_dos (callable): segunda función de validación que recibe la cadena y un parámetro adicional.
-        parametro_dos (int): parámetro adicional para la segunda validación.
+        cadena (str): Mensaje a mostrar para solicitar la entrada.
+        validacion_uno (callable): Primera función de validación (solo recibe la cadena).
+        validacion_dos (callable): Segunda función de validación (recibe la cadena y un parámetro).
+        parametro_dos (int): Parámetro adicional para la segunda validación.
 
     Returns:
-        str: cadena ingresada por el usuario que cumple ambas validaciones.
-    """
+        str: Cadena ingresada que cumple ambas validaciones.
+    """ 
     cadena = input(cadena)
+    
     while True:
         if validacion_uno(cadena) and validacion_dos(cadena,parametro_dos):
             return cadena
         else:
             cadena = input("ingreso algún caracter invalido,intente otra vez: ")
       
-def validar_longuitud(dato:str,longuitud:int) -> bool:
+def validar_longitud(dato:str,longitud:int) -> bool:
     """
-    Comprueba si la longitud de una cadena supera un valor dado.
+    Verifica si la longitud de una cadena es mayor que un valor dado.
 
     Args:
-        dato (str): cadena que se desea evaluar.
-        longuitud (int): longitud mínima requerida.
+        dato (str): Cadena a evaluar.
+        longitud (int): Longitud mínima requerida.
 
     Returns:
-        bool: True si len(dato) es mayor que longuitud; False en caso contrario.
+        bool: True si la longitud de la cadena es mayor al valor dado, False en caso contrario.
     """
-    if len(dato) > longuitud :
+    if len(dato) > longitud :
         return True
     else:
         return False
@@ -165,6 +166,22 @@ def verificar_tipo_retorno(variable:any,tipo) -> bool:
         bool: True si la variable es del tipo indicado, False en caso contrario.
     """
     if type(variable) is tipo:
+        return True
+    else:
+        return False
+    
+def comprobar_array_vacio(valor_uno,valor_dos) -> bool:
+    """
+    Verifica si ambas listas están vacías.
+
+    Args:
+        valor_uno (list): Primera lista.
+        valor_dos (list): Segunda lista.
+
+    Returns:
+        bool: True si ambas listas están vacías, False en caso contrario.
+    """
+    if valor_uno == [] and valor_dos == []:
         return True
     else:
         return False
