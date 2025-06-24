@@ -64,7 +64,7 @@ def inicializar_matriz(cantidad_filas:int,cantidad_columnas:int,valor_inicial:an
     matriz = []
 
     for i in range(cantidad_filas):
-        fila = [valor_inicial] * cantidad_columnas
+        fila = generar_array(cantidad_columnas,valor_inicial)
 
         matriz += [fila]
     return matriz
@@ -87,22 +87,22 @@ def mostrar_array(array:list,msj_opcional="") -> str:
         msj += f"{msj_opcional}{i + 1}- {array[i]}\n"
     return msj
 
-def mostrar_mismo_puntaje(array_nombres:list,matriz_puntajes:list) -> str:
+def mostrar_mismo_puntaje(matriz_nombres,array_puntajes) -> str:
     """
     Muestra los participantes agrupados por promedio repetido.
 
     Args:
-        array_nombres (list): Lista de promedios repetidos.
-        matriz_puntajes (list): Lista de listas con nombres de los participantes que tienen ese promedio.
+        array_puntajes(list): Lista de promedios repetidos.
+        matriz_nombres(list): Lista de listas con nombres de los participantes que tienen ese promedio.
 
     Returns:
         str: Cadena con los promedios y los participantes que los comparten.
     """
     msj = ""
-    for f in range(len(matriz_puntajes)): 
-        msj += f"PARTICIPANTES CON PROMEDIO: {array_nombres[f]:.2f}\n"
-        for c in range(len(matriz_puntajes[f])):
-            msj += f"-{matriz_puntajes[f][c]}\n"
+    for i in range(len(matriz_nombres)): 
+        msj += f"PARTICIPANTES CON PROMEDIO: {array_puntajes[i]:.2f}\n"
+        for nombre in range(len(matriz_nombres[i])):
+            msj += f"- {matriz_nombres[i][nombre]}\n"
     return msj
     
 def mostrar_puntajes(array_nombres:list,matriz_puntajes:list,array_promedios:list) -> str:
@@ -213,7 +213,8 @@ def mostrar_participantes_con_promedios_iguales(valor_uno,valor_dos,msj_error:st
     if comprobar_array_vacio(valor_uno,valor_dos):
         return msj_error
     else:
-        return mostrar_mismo_puntaje(valor_uno,valor_dos)
+        msj = mostrar_mismo_puntaje(valor_uno,valor_dos)
+        return msj
         
 
 def mostrar_si_hay_empate(booleano:bool,array_nombres:list,matriz_puntajes:list,array_promedios:list) -> str:

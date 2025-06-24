@@ -6,8 +6,8 @@ bandera_puntajes = True
 bandera_ganador = True
 
 
-array_participantes = generar_array(4,0)
-matriz_puntajes = inicializar_matriz(4,3,0)
+array_participantes = generar_array(5,0)
+matriz_puntajes = inicializar_matriz(5,3,0)
 
 while True:
     os.system("cls")
@@ -88,7 +88,6 @@ while True:
                 print("\nPARTICIPANTES CON LA MISMA PUNTUACION FINAL:\n")
                 grupo_participantes,mismo_puntaje = buscar_mismo_puntaje(promedio_participantes,array_participantes)
                 msj = "\n ** Error! no hay ningun participante con el mismo promedio final **"
-                #print(mostrar_segun_retorno(grupo_participantes,mismo_puntaje,msj))
                 print(mostrar_participantes_con_promedios_iguales(grupo_participantes,mismo_puntaje,msj))
 
         case "10":
@@ -126,7 +125,7 @@ while True:
             elif hay_ganador:
                 print("\n **** El desempate no es una opciona, el ganador ya fue elegido  **** ")
             else: 
-                ganador = calcular_ganador_desempate(array_participantes,matriz_puntajes,promedio_participantes)
+                ganador = calcular_ganador_desempate(promedio_participantes)
                 print("\n ¡DESEMPATE! El ganador será elegido al azar entre los puntajes mas altos\n El ganador es:\n")
                 print(mostrar_puntaje_participante(array_participantes[ganador],matriz_puntajes[ganador],promedio_participantes[ganador]))
         case _:
