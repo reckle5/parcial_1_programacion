@@ -408,25 +408,25 @@ def calcular_ganador(array_promedios:list) -> bool:
 
 def calcular_ganador_desempate(array_promedios) -> int:
     """
-    En caso de empate en el primer puesto, elige aleatoriamente a uno de los empatados como ganador.
+    Elige aleatoriamente al ganador entre los participantes empatados en el primer puesto.
 
-    Busca cuántos participantes tienen el mismo promedio que el primero, y selecciona uno al azar.
+    Esta función se utiliza cuando varios participantes tienen el puntaje promedio más alto.
+    Recorre la lista de promedios (ordenada de mayor a menor) y selecciona al azar uno de 
+    los participantes que tengan el mismo promedio que el primero.
 
     Args:
         array_promedios (list): Lista de promedios ordenada de mayor a menor.
 
     Returns:
-        int: Índice del ganador elegido al azar entre los empatados.
+        int: Índice del ganador elegido aleatoriamente entre los empatados.
     """
-    contador = 0
+    empatados = [0]
 
     for i in range( 1,len(array_promedios)):
         if array_promedios[0] == array_promedios[i]:
-            contador+=1
-    
-    ganador_random = random.randint(0,contador-1)
+            empatados.append(i)
 
-    return ganador_random
+    return random.choice(empatados)
 
 #FUNCIONES DE BUSQUEDA
 

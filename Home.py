@@ -13,8 +13,8 @@ while True:
     os.system("cls")
     match menu_principal():
 
-        case "1":
 
+        case "1":
             if not bandera_nombres:
                 print("\n *** ERROR! LOS PARTICIPANTES YA FUERON INGRESADOS ***")
             else:
@@ -23,7 +23,6 @@ while True:
                 print("\n PARTICIPANTES INGRESADOS:\n")
                 print(mostrar_array(array_participantes))
                 bandera_nombres = False
-
         case "2":
 
             if bandera_nombres:
@@ -33,9 +32,7 @@ while True:
             else:
                 print("\nINGRESE LA PUNTUACION DE CADA JURADO:\n")
                 cargar_datos_matriz(matriz_puntajes,"Puntaje del Jurado n°")
-
                 bandera_puntajes = False
-            
         case "3":
             if  bandera_nombres or  bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
@@ -43,21 +40,18 @@ while True:
                 suma_de_puntajes = sumar_fila_matriz(matriz_puntajes)
                 promedio_participantes = calcular_promedio(suma_de_puntajes,3)
                 print(mostrar_puntajes(array_participantes,matriz_puntajes,promedio_participantes))
-
         case "4":
             if bandera_nombres or  bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
             else:
                 print("\nPARTICIPANTES CON PROMEDIO MENOR A 4:")
                 print(mostrar_promedio_participantes(array_participantes,promedio_participantes,4,True))
-
         case "5":
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
             else:
                 print("\nPARTICIPANTES CON PROMEDIO MENOR A 8:")
                 print(mostrar_promedio_participantes(array_participantes,promedio_participantes,8,True))
-
         case "6":
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
@@ -66,21 +60,18 @@ while True:
                 suma_de_puntajes_jurados = sumar_columnas_matriz(matriz_puntajes)
                 promedio_jurados = calcular_promedio(suma_de_puntajes_jurados,len(array_participantes))
                 print(mostrar_array(promedio_jurados,f"Jurado n° "))
-
         case "7": 
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
             else: 
                 jurado_estrico,jurado_generoso,promedio_min,promedio_max = calcular_tipo_de_jurado(promedio_jurados)
                 print(f"\nel jurado mas estrico fue n°{jurado_estrico}, con un promedio de {promedio_min}")
-
         case "8":
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
             else:
                 jurado_estrico,jurado_generoso,promedio_min,promedio_max = calcular_tipo_de_jurado(promedio_jurados)
                 print(f"\nel jurado mas generoso fue n°{jurado_generoso}, con un promedio de {promedio_max}")
-
         case "9":
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
@@ -89,7 +80,6 @@ while True:
                 grupo_participantes,mismo_puntaje = buscar_mismo_puntaje(promedio_participantes,array_participantes)
                 msj = "\n ** Error! no hay ningun participante con el mismo promedio final **"
                 print(mostrar_participantes_con_promedios_iguales(grupo_participantes,mismo_puntaje,msj))
-
         case "10":
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
@@ -101,7 +91,6 @@ while True:
             else:
                 ordenar_promedio_mayor(array_participantes,matriz_puntajes,promedio_participantes)
                 print(mostrar_top_3(array_participantes,promedio_participantes))
-
         case "12":
             if bandera_nombres or bandera_puntajes:
                 print("\n **** Debe ingresar los nombres y puntajes para acceder a esta opcion  ****")
